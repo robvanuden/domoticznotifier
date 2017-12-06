@@ -22,7 +22,7 @@ namespace DomoticzNotifier
 
                 string[] pushbulletAccessTokens = Environment.GetEnvironmentVariable("PushbulletAccessTokens").Split(';');
 
-                foreach (var pushbulletAccessToken in pushbulletAccessTokens)
+                Parallel.ForEach(pushbulletAccessTokens, pushbulletAccessToken =>
                 {
                     var pushbulletClient = new PushbulletClient(pushbulletAccessToken);
                     var result = pushbulletClient.PushNote(new PushNoteRequest()
@@ -30,7 +30,7 @@ namespace DomoticzNotifier
                         Body = notifyRequest.message,
                         Title = notifyRequest.subject
                     });
-                }
+                });
 
                 return req.CreateResponse(HttpStatusCode.OK);
             }
